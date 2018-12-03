@@ -219,21 +219,22 @@ function gameLoop() {
 
         // #2 - Check Keys
         if (keys[keyboard.RIGHT] || keys[keyboard.d]) {
-            spider.x += spider.speed * dt;
+            spider.dx += speed;
         } else if (keys[keyboard.LEFT || keys[keyboard.a]]) {
-            spider.x += -spider.speed * dt;
+            spider.dx -= speed;
         } else {
-            spider.x += 0;
+            spider.dx += 0;
         }
 
         if (keys[keyboard.DOWN] || keys[keyboard.s]) {
-            spider.y += spider.speed * dt;
+            spider.dy += speed;
         } else if (keys[keyboard.UP] || keys[keyboard.w]) {
-            spider.y += -spider.speed * dt;
+            spider.dy -= speed;
         } else {
-            spider.y += 0;
+            spider.dy += 0;
         }
 
+        spider.update();
     });
 
 

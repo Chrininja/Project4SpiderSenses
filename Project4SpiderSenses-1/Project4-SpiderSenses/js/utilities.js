@@ -32,3 +32,7 @@
 	function getRandom(min, max) {
 		return Math.random() * (max - min) + min;
 	}
+
+	function magnitude(x, y) {
+		return Math.sqrt(x * x, y * y);
+	}

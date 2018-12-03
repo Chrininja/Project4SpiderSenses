@@ -6,6 +6,13 @@ class Spider extends PIXI.Sprite {
         this.speed = speed;
         this.x = x;
         this.y = y;
+        this.dx = 0;
+        this.dy = 0;
+    }
+
+    update() {
+        spider.x += this.dx / magnitude(this.dx, this.dy) * this.speed * dt;
+        spider.y += this.dy / magnitude(this.dx, this.dy) * this.speed * dt;
     }
 }
 
