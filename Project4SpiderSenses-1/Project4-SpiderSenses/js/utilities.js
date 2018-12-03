@@ -1,16 +1,5 @@
 	// http://paulbourke.net/miscellaneous/interpolation/
 	
-	// we use this to interpolate the ship towards the mouse position
-	function lerp(start, end, amt){
-  		return start * (1-amt) + amt * end;
-	}
-	
-	// we didn't use this one
-	function cosineInterpolate(y1, y2, amt){
-  		let amt2 = (1 - Math.cos(amt * Math.PI)) / 2;
-  		return (y1 * (1 - amt2)) + (y2 * amt2);
-	}
-	
 	// we use this to keep the ship on the screen
 	function clamp(val, min, max){
         return val < min ? min : (val > max ? max : val);

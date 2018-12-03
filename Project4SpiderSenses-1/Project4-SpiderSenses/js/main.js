@@ -31,6 +31,7 @@ let waterDropSound;
 let hitSound;
 let gameOverScene;
 let gameOverTimeLabel;
+let dt;
 
 let circles = [];
 let bullets = [];
@@ -68,7 +69,9 @@ function setup() {
     createLabelsAndButtons();
 
     // #5 - Create spider
-    spider = new Spider(50, 50, 100);
+    // spider = new Spider();
+    // gameScene.addChild(spider);
+    spider = new Spider(15, 15, 4);
     gameScene.addChild(spider);
 
     // #6 - Load Sounds
@@ -206,65 +209,37 @@ function gameLoop() {
     // if (paused) return; // keep this commented out for now
 
     // #1 - Calculate "delta time"
-    let dt = 1 / app.ticker.FPS;
+    dt = 1 / app.ticker.FPS;
     if (dt > 1 / 12) dt = 1 / 12;
     increaseTimeBy(dt);
 
     // #2 - Move Spider
     // Animation Loop
     app.ticker.add(() => {
-        // #1 - Calculate "delta time"
-        dt = 1 / app.ticker.FPS;
-        if (dt > 1 / 12) dt = 1 / 12;
 
         // #2 - Check Keys
         if (keys[keyboard.RIGHT] || keys[keyboard.d]) {
-            spider.dx = spider.speed;
+            spider.x += spider.speed * dt;
         } else if (keys[keyboard.LEFT || keys[keyboard.a]]) {
-            spider.dx = -spider.speed;
+            spider.x += -spider.speed * dt;
         } else {
-            spider.dx = 0;
+            spider.x += 0;
         }
 
         if (keys[keyboard.DOWN] || keys[keyboard.s]) {
-            spider.dy = spider.speed;
+            spider.y += spider.speed * dt;
         } else if (keys[keyboard.UP] || keys[keyboard.w]) {
-            spider.dy = -spider.speed;
+            spider.y += -spider.speed * dt;
         } else {
-            spider.dy = 0;
+            spider.y += 0;
         }
-
-        // #3 - move avatar
-        spider.update(dt);
 
     });
 
-    let amt = 6 * dt; // at 60 FPS would move about 10% of distance per update
-
-    // lerp (linear interpolate) the x & y values with lerp()
-    let newX = lerp(spider.x, amt);
-    let newY = lerp(spider.y, amt);
 
     // keep the spider on the screen with clamp()
     let w2 = spider.width / 2;
     let h2 = spider.height / 2;
-    spider.x = clamp(newX, 0 + w2, sceneWidth - w2);
-    spider.y = clamp(newY, 0 + h2, sceneHeight - h2);
-
-
-    // #3 - Move Circles
-    for (let c of circles) {
-        c.move(dt);
-        if (c.x <= c.radius || c.x >= sceneWidth - c.radius) {
-            c.reflectX();
-            c.move(dt);
-        }
-
-        if (c.y <= c.radius || c.y >= sceneHeight - c.radius) {
-            c.reflectY();
-            c.move(dt);
-        }
-    }
 
 
     // #4 - Move Bullets
@@ -273,24 +248,14 @@ function gameLoop() {
     }
 
 
-    // #5 - Check for Collisions
-    for (let c of circles) {
-        for (let b of bullets) {
-            // #5A - circles & bullets
-            if (rectsIntersect(c, b)) {
-                createExplosion(c.x, c.y, 64, 64);
-                gameScene.removeChild(c);
-                c.isAlive = false;
-                gameScene.removeChild(b);
-                b.isAlive = false;
-            }
-
-            if (b.y < -10) b.isAlive = false;
-        }
-
-        // #5B - circles & spider
-        if (c.isAlive && rectsIntersect(c, spider)) {
+    // Collisions between bullets and spider
+    for(let b of bullets){
+        if(rectsIntersect(b, spider))
+        {
+            createExplosion(spider.x, spider.y, 64, 64);
             hitSound.play();
+            gameScene.removeChild(b);
+            gameScene.removeChild(spider);
             end();
             return;
         }
@@ -300,10 +265,6 @@ function gameLoop() {
     // #6 - Now do some clean up
     //get rid of dead bullets
     bullets = bullets.filter(b => b.isAlive);
-
-
-    // get rid of dead circles 
-    circles = circles.filter(c => c.isAlive);
 
 
     // get rid of explosions
@@ -331,7 +292,6 @@ function startGame() {
     time = 0;
     spider.x = 300;
     spider.y = 550;
-    loadLevel();
 }
 
 function end() {
@@ -347,7 +307,7 @@ function end() {
     explosions.forEach(e => gameScene.removeChild(e)); // ditto
     explosions = [];
 
-    gameOverTimeLabel.text = "Your Time: " + time;
+    gameOverTimeLabel.text = "Your Time: " + time.toFixed(2);
     gameOverScene.visible = true;
     gameScene.visible = false;
 }
