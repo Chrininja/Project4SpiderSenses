@@ -43,13 +43,14 @@ function createExplosion(x, y, frameWidth, frameHeight) {
 
 function liquidDrops(e) {
 
+    if (paused) return;
     let divider = 8;
-    sceneWidth /= divider;
+    let division = sceneWidth / divider;
 
     let randomNum = Math.floor(Math.random() * divider) + 1;
 
     let water;
-    water = new Bullet(0x00ff00, sceneWidth * randomNum, sceneHeight);
+    water = new Bullet(0x00ff00, division * randomNum, 0);
     bullets.push(water);
 
     gameScene.addChild(water);

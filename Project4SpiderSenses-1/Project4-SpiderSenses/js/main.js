@@ -278,7 +278,6 @@ function gameLoop() {
         for (let b of bullets) {
             // #5A - circles & bullets
             if (rectsIntersect(c, b)) {
-                fireballSound.play();
                 createExplosion(c.x, c.y, 64, 64);
                 gameScene.removeChild(c);
                 c.isAlive = false;
