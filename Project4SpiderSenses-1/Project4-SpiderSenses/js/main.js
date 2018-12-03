@@ -1,7 +1,7 @@
 // We will use `strict mode`, which helps us by having the browser catch many common JS mistakes
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode
 "use strict";
-const app = new PIXI.Application(600, 600);
+const app = new PIXI.Application(800, 600);
 document.body.appendChild(app.view);
 
 // constants
@@ -65,7 +65,7 @@ function setup() {
     createLabelsAndButtons();
 
     // #5 - Create spider
-    spider = new Spider(50, 50, 200);
+    spider = new Spider();
     gameScene.addChild(spider);
 
     // #6 - Load Sounds
@@ -198,7 +198,8 @@ function startGame() {
 // Function to keep increasing the time
 function increaseTimeBy(value) {
     time += value;
-    timeLabel.text = `Time ${time}`;
+    let t = time.toFixed(2);
+    timeLabel.text = `Time ${t}`;
 }
 
 // The actual game loop that runs when game plays
@@ -383,7 +384,7 @@ function fireBullet(e) {
         bullets.push(bright);
         gameScene.addChild(bright);
 
-        
+
     } else {
         let b = new Bullet(0xFFFFFF, spider.x, spider.y);
         bullets.push(b);
