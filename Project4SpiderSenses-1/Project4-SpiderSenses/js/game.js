@@ -50,7 +50,7 @@ function liquidDrops(e) {
     let randomNum = Math.floor(Math.random() * divider) + 1;
 
     let water;
-    water = new Bullet(0x00ff00, division * randomNum, 0);
+    water = new Bullet(0x538fef, division * randomNum, 0);
     bullets.push(water);
 
     gameScene.addChild(water);
