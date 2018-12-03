@@ -1,7 +1,10 @@
 // We will use `strict mode`, which helps us by having the browser catch many common JS mistakes
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode
 "use strict";
-const app = new PIXI.Application(800, 600);
+let app = new PIXI.Application(800, 600, {
+    backgroundColor: 0x808080
+});
+
 document.body.appendChild(app.view);
 
 // constants
@@ -10,7 +13,7 @@ const sceneHeight = app.view.height;
 
 // pre-load the images
 PIXI.loader.
-add(["images/Spider.png", "images/explosions.png"]).
+add(["images/spider1.png", "images/explosions.png"]).
 on("progress", e => {
     console.log(`progress=${e.progress}`)
 }).
@@ -26,7 +29,6 @@ let spider;
 let timeLabel;
 let waterDropSound;
 let hitSound;
-let fireballSound;
 let gameOverScene;
 let gameOverTimeLabel;
 
@@ -39,6 +41,7 @@ let time = 0;
 let levelNum = 1;
 let paused = true;
 
+/// Set up the scenes
 function setup() {
     stage = app.stage;
 
@@ -65,7 +68,7 @@ function setup() {
     createLabelsAndButtons();
 
     // #5 - Create spider
-    spider = new Spider();
+    spider = new Spider(50, 50, 100);
     gameScene.addChild(spider);
 
     // #6 - Load Sounds
@@ -77,18 +80,14 @@ function setup() {
         src: ['sounds/spider/say1.mp3']
     });
 
-    fireballSound = new Howl({
-        src: ['sounds/liquids/fireball.mp3']
-    })
-
     // #7 - Load sprite sheet
     explosionTextures = loadSpriteSheet();
 
     // #8 - Start update loop
     app.ticker.add(gameLoop);
 
-    // #9 - Start listening for click events on the canvas
-    app.view.onclick = fireBullet;
+    // #9
+    app.view.onclick = liquidDrops;
 
     // Now our `startScene` is visible
     // Clicking the button calls startGame()
@@ -320,16 +319,6 @@ function gameLoop() {
 
 }
 
-function createCircles(numCircles) {
-    for (let i = 0; i < numCircles; i++) {
-        let c = new Circle(10, 0xFFFF00);
-        c.x = Math.random() * (sceneWidth - 50) + 25;
-        c.y = Math.random() * (sceneHeight - 400) + 25;
-        circles.push(c);
-        gameScene.addChild(c);
-    }
-}
-
 function loadLevel() {
     createCircles(levelNum * 5);
     paused = false;
@@ -362,67 +351,4 @@ function end() {
     gameOverTimeLabel.text = "Your Time: " + time;
     gameOverScene.visible = true;
     gameScene.visible = false;
-}
-
-function fireBullet(e) {
-    // let rect = app.view.getBoundingClientRect();
-    // let mouseX = e.clientX - rect.x;
-    // let mouseY = e.clientY - rect.y;
-    // console.log(`${mouseX},${mouseY}`);
-    if (paused) return;
-
-    if (levelNum > 1) {
-        let bleft = new Bullet(0xFFFFFF, spider.x - 15, spider.y);
-        bullets.push(bleft);
-        gameScene.addChild(bleft);
-
-        let bmiddle = new Bullet(0xFFFFFF, spider.x, spider.y)
-        bullets.push(bmiddle);
-        gameScene.addChild(bmiddle);
-
-        let bright = new Bullet(0xFFFFFF, spider.x + 15, spider.y)
-        bullets.push(bright);
-        gameScene.addChild(bright);
-
-
-    } else {
-        let b = new Bullet(0xFFFFFF, spider.x, spider.y);
-        bullets.push(b);
-        gameScene.addChild(b);
-    }
-
-    waterDropSound.play();
-}
-
-function loadSpriteSheet() {
-    // the 16 animation frames in each row are 64x64 pixels
-    // we are using the second row
-    // http://pixi.js.download/dev/docs/PIXI.BaseTexture.html
-    let spriteSheet = PIXI.BaseTexture.fromImage("images/explosions.png");
-    let width = 64;
-    let height = 64;
-    let numFrames = 16;
-    let textures = [];
-    for (let i = 0; i < numFrames; i++) {
-        // http://pixijs.download/dev/docs/PIXI.Texture.html
-        let frame = new PIXI.Texture(spriteSheet, new PIXI.Rectangle(i * width, 64, width, height));
-        textures.push(frame);
-    }
-    return textures;
-}
-
-function createExplosion(x, y, frameWidth, frameHeight) {
-    // http://pixijs.download/dev/docs/PIXI.extras.AnimatedSprite.html
-    // the animation frames are 64x64 pixels
-    let w2 = frameWidth / 2;
-    let h2 = frameHeight / 2;
-    let expl = new PIXI.extras.AnimatedSprite(explosionTextures);
-    expl.x = x - w2; // we want the explosions to appear at the center of the circle
-    expl.y = y - h2; // ditto
-    expl.animationSpeed = 1 / 7;
-    expl.loop = false;
-    expl.onComplete = e => gameScene.removeChild(expl);
-    explosions.push(expl);
-    gameScene.addChild(expl);
-    expl.play();
 }

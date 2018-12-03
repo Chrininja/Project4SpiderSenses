@@ -1,7 +1,7 @@
 class Spider extends PIXI.Sprite {
     constructor(x = 0, y = 0, speed = 100) {
-        super(PIXI.loader.resources["images/Spider.png"].texture);
-        this.anchor.set(.5, .5); // position, scaling, rotating etc are now from center of sprite
+        super(PIXI.loader.resources["images/spider1.png"].texture);
+        this.anchor.set(0.5, 0.5); // position, scaling, rotating etc are now from center of sprite
         this.scale.set(0.1);
         this.speed = speed;
         this.x = x;
