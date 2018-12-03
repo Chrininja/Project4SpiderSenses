@@ -45,7 +45,7 @@ class Bullet extends PIXI.Graphics {
     constructor(color = 0xFFFFFF, x = 0, y = 0) {
         super();
         this.beginFill(color);
-        this.drawRect(-2, -3, 4, 6);
+        this.drawRect(-40, -40, 40, 40);
         this.endFill();
         this.x = x;
         this.y = y;
@@ -54,7 +54,7 @@ class Bullet extends PIXI.Graphics {
             x: 0,
             y: -1
         };
-        this.speed = 400;
+        this.speed = 600;
         this.isAlive = true;
         Object.seal(this);
     }
