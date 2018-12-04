@@ -37,7 +37,8 @@ let circles = [];
 let bullets = [];
 let aliens = [];
 let explosions = [];
-let explosionTextures;
+let spiderTextures;
+let crawlAnimation;
 let time = 0;
 let levelNum = 1;
 let paused = true;
@@ -69,9 +70,7 @@ function setup() {
     createLabelsAndButtons();
 
     // #5 - Create spider
-    // spider = new Spider();
-    // gameScene.addChild(spider);
-    spider = new Spider(15, 15, 4);
+    spider = new Spider(300, 250, 200);
     gameScene.addChild(spider);
 
     // #6 - Load Sounds
@@ -83,17 +82,15 @@ function setup() {
         src: ['sounds/spider/say1.mp3']
     });
 
-    // #7 - Load sprite sheet
-    explosionTextures = loadSpriteSheet();
+    // #7 - Load spider spritesheet
+    spiderTextures = loadSpriteSheet();
+    crawlAnimation = new PIXI.extras.AnimatedSprite(spiderTextures);
 
     // #8 - Start update loop
     app.ticker.add(gameLoop);
 
     // #9
     app.view.onclick = liquidDrops;
-
-    // Now our `startScene` is visible
-    // Clicking the button calls startGame()
 }
 
 // For creatings labels and buttons
@@ -214,34 +211,31 @@ function gameLoop() {
     increaseTimeBy(dt);
 
     // #2 - Move Spider
-    // Animation Loop
-    app.ticker.add(() => {
-
-        // #2 - Check Keys
-        if (keys[keyboard.RIGHT] || keys[keyboard.d]) {
-            spider.dx += speed;
-        } else if (keys[keyboard.LEFT || keys[keyboard.a]]) {
-            spider.dx -= speed;
-        } else {
-            spider.dx += 0;
-        }
-
-        if (keys[keyboard.DOWN] || keys[keyboard.s]) {
-            spider.dy += speed;
-        } else if (keys[keyboard.UP] || keys[keyboard.w]) {
-            spider.dy -= speed;
-        } else {
-            spider.dy += 0;
-        }
-
-        spider.update();
-    });
-
-
-    // keep the spider on the screen with clamp()
+    let newX = spider.x;
+    let newY = spider.y;
+    let amt = spider.speed * dt;
     let w2 = spider.width / 2;
     let h2 = spider.height / 2;
 
+    // Animation Loop
+    app.ticker.add(() => {
+        // #2 - Check Keys
+        if (keys[keyboard.RIGHT] || keys[keyboard.d]) {
+            newX += amt;
+        } else if (keys[keyboard.LEFT || keys[keyboard.a]]) {
+            newX -= amt;
+        }
+
+        if (keys[keyboard.DOWN] || keys[keyboard.s]) {
+            newY += amt;
+        } else if (keys[keyboard.UP] || keys[keyboard.w]) {
+            newY -= amt;
+        }
+
+        spider.update(newX, newY);
+    });
+
+    crawl(crawlAnimation);
 
     // #4 - Move Bullets
     for (let b of bullets) {
@@ -250,10 +244,8 @@ function gameLoop() {
 
 
     // Collisions between bullets and spider
-    for(let b of bullets){
-        if(rectsIntersect(b, spider))
-        {
-            createExplosion(spider.x, spider.y, 64, 64);
+    for (let b of bullets) {
+        if (rectsIntersect(b, spider)) {
             hitSound.play();
             gameScene.removeChild(b);
             gameScene.removeChild(spider);
@@ -281,7 +273,6 @@ function gameLoop() {
 }
 
 function loadLevel() {
-    createCircles(levelNum * 5);
     paused = false;
 }
 
@@ -291,22 +282,14 @@ function startGame() {
     gameOverScene.visible = false;
     gameScene.visible = true;
     time = 0;
-    spider.x = 300;
-    spider.y = 550;
 }
 
 function end() {
     paused = true;
 
     // clear out the level
-    circles.forEach(c => gameScene.removeChild(c)); // concise arrow function with no brackets and no return
-    circles = [];
-
     bullets.forEach(b => gameScene.removeChild(b)); // ditto
     bullets = [];
-
-    explosions.forEach(e => gameScene.removeChild(e)); // ditto
-    explosions = [];
 
     gameOverTimeLabel.text = "Your Time: " + time.toFixed(2);
     gameOverScene.visible = true;

@@ -8,11 +8,13 @@ class Spider extends PIXI.Sprite {
         this.y = y;
         this.dx = 0;
         this.dy = 0;
+        this.w2 = this.width / 2;
+        this.h2 = this.height / 2;
     }
 
-    update() {
-        spider.x += this.dx / magnitude(this.dx, this.dy) * this.speed * dt;
-        spider.y += this.dy / magnitude(this.dx, this.dy) * this.speed * dt;
+    update(newX, newY) {
+        this.x = clamp(newX, this.w2, sceneWidth - this.w2);
+        this.y = clamp(newY, this.h2, sceneHeight - this.h2);
     }
 }
 
