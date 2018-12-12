@@ -44,6 +44,11 @@ const liquidType = Object.freeze({
 // Aliases
 let stage;
 
+// Field for local storage
+const prefix = "Spidersenses-";
+let storedHighScore = localStorage.getItem(prefix + "highScore");
+let highScore;
+
 // Field for game variables
 let liquidsTextures = [];
 let backgroundImgs = [];
@@ -57,6 +62,7 @@ let waterDropSound, fireSound, gooSound, poisonSound, chocolateSound, peeSound, 
 let hitSound, loseSound;
 let gameOverScene;
 let gameOverTimeLabel;
+let highScoreLabel;
 let dt;
 
 // Game Scene variables
@@ -267,6 +273,13 @@ function createLabelsAndButtons() {
     gameOverTimeLabel.y = sceneHeight / 2 - 50;
     gameOverScene.addChild(gameOverTimeLabel);
 
+    // High score label
+    highScoreLabel = new PIXI.Text();
+    highScoreLabel.style = textStyle;
+    highScoreLabel.x = sceneWidth / 12 + 30;
+    highScoreLabel.y = sceneHeight / 2 + 50;
+    gameOverScene.addChild(highScoreLabel);
+
     let overStyle = new PIXI.TextStyle({
         fill: 0x016699,
         fontSize: 44,
@@ -379,7 +392,20 @@ function end() {
     liquids = [];
 
     loseSound.play();
-    gameOverTimeLabel.text = "Your Time: " + time.toFixed(2) + " s";
+    let score = roundToTwoDP(time);
+    gameOverTimeLabel.text = "Your Time: " + score + " s";
+
+    // Local storage
+    if (storedHighScore == null || parseInt(storedHighScore, 10) < score) {
+        score = JSON.stringify(score);
+        localStorage.setItem(prefix + "highScore", score);
+    }
+    
+    // Retrieve the current high score
+    storedHighScore = localStorage.getItem(prefix + "highScore");
+    storedHighScore = JSON.parse(storedHighScore);
+    highScoreLabel.text = "High Score: " + storedHighScore + "s";
+
     startScene.visible = false;
     controlsScene.visible = false;
     gameOverScene.visible = true;

@@ -56,3 +56,7 @@ function increaseTimeBy(value) {
 function roundToPointFive(value) {
 	return Math.round(value * 2) / 2;
 }
+
+function roundToTwoDP(value) {
+	return Math.round(value * 100) / 100;
+}
