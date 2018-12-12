@@ -19,35 +19,11 @@ class Spider extends PIXI.Sprite {
     }
 }
 
-class Circle extends PIXI.Graphics {
-    constructor(radius, color = 0xFF0000, x = 0, y = 0) {
-        super();
-        this.beginFill(color);
-        this.drawCircle(0, 0, radius);
-        this.endFill();
-        this.x = x;
-        this.y = y;
-        this.radius = radius;
-        //variables
-        this.fwd = getRandomUnitVector();
-        this.speed = 50;
-        this.isAlive = true;
-    }
-
-    move(dt = 1 / 60) {
-        this.y += this.fwd.y * this.speed * dt;
-    }
-
-    reflectY() {
-        this.fwd.y *= -1;
-    }
-}
-
 class Liquid extends PIXI.Sprite {
-    constructor(x = 0, y = 0, speed = 600, liquidType = 1) {
+    constructor(x = 0, y = 0, speed = 500, liquidType = 1) {
         super(liquidsTextures[liquidType - 1]);
         this.anchor.set(0.5, 0.5);
-        this.scale.set(0.1);
+        this.scale.set(0.25);
         this.x = x;
         this.y = y;
         //variables
@@ -55,12 +31,22 @@ class Liquid extends PIXI.Sprite {
             x: 0,
             y: -1
         };
-        this.speed = 600;
+        this.speed = speed;
         this.isAlive = true;
     }
 
     move(dt = 1 / 60) {
         this.x += this.fwd.x * this.speed * dt;
         this.y -= this.fwd.y * this.speed * dt;
+    }
+}
+
+class Background extends PIXI.Sprite {
+    constructor(x = 0, y = 0, width, height) {
+        super(PIXI.loader.resources["media/lab-background.png"].texture);
+        this.x = x;
+        this.y = y;
+        this.width = width;
+        this.height = height;
     }
 }

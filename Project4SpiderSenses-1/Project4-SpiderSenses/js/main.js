@@ -12,9 +12,10 @@ const sceneHeight = app.view.height;
 
 // Pre-load the images
 PIXI.loader.
-add(["media/spider.png", "media/liquids/chocolate.png", "media/liquids/goo.png",
-    "media/liquids/icicle.png", "media/liquids/lava.png", "media/liquids/milk.png",
-    "media/liquids/pee.png", "media/liquids/poison.png", "media/liquids/water.png"
+add(["media/lab-background.png", "media/spider.png", "media/liquids/chocolate.png",
+    "media/liquids/goo.png", "media/liquids/icicle.png", "media/liquids/lava.png",
+    "media/liquids/milk.png", "media/liquids/pee.png", "media/liquids/poison.png",
+    "media/liquids/water.png"
 ]).on("progress", e => {
     console.log(`progress=${e.progress}`)
 }).
@@ -53,10 +54,11 @@ let hitSound;
 let gameOverScene;
 let gameOverTimeLabel;
 let dt;
+let background;
 
 // Game Scene variables
 let divider = 8;
-let division = sceneWidth / divider;
+let division = (sceneWidth - 50) / divider;
 let randomNum;
 
 let circles = [];
@@ -67,9 +69,6 @@ let time = 0;
 let timeToFire = 0;
 let paused = true;
 let currentScene;
-
-// Game Objects
-let water, lava, goo, poison, chocolate, pee, ice, milk;
 
 /// Set up the scenes
 function setup() {
@@ -98,7 +97,11 @@ function setup() {
     // Create the main `game` scene and make it invisible
     gameScene = new PIXI.Container();
     gameScene.visible = false;
-    stage.addChild(gameScene)
+    stage.addChild(gameScene);
+
+    // Set the background for game scene
+    background = new Background(0, 0, sceneWidth, sceneHeight);
+    gameScene.addChild(background);
 
     // Create the `gameOver` scene and make it invisible
     gameOverScene = new PIXI.Container();
@@ -108,17 +111,7 @@ function setup() {
     // Create labels for all 3 scenes
     createLabelsAndButtons();
 
-    spider = new Spider(300, 250, 200);
-
-    // Load game objects
-    water = new Liquid(division * randomNum, 0, 500, liquidType.Water);
-    lava = new Liquid(division * randomNum, 0, 500, liquidType.Lava);
-    goo = new Liquid(division * randomNum, 0, 500, liquidType.Goo);
-    poison = new Liquid(division * randomNum, 0, 500, liquidType.Poison);
-    chocolate = new Liquid(division * randomNum, 0, 500, liquidType.Chocolate);
-    pee = new Liquid(division * randomNum, 0, 500, liquidType.Pee);
-    ice = new Liquid(division * randomNum, 0, 500, liquidType.Ice);
-    milk = new Liquid(division * randomNum, 0, 500, liquidType.Milk);
+    spider = new Spider(300, 250, 250);
 
     // Load Sounds
     // waterDropSound, fire, goo, poison, chocolate, pee, liquidNitro;
@@ -293,6 +286,7 @@ function startGame() {
     spider.x = 450;
     spider.y = sceneHeight - 30;
     time = 0;
+    timeToFire = 0.5;
     startScene.visible = false;
     gameOverScene.visible = false;
     gameScene.visible = true;

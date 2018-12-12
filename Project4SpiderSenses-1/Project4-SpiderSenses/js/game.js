@@ -23,6 +23,10 @@ function gameLoop() {
     if (currentScene == gameState.GameScene) {
 
         if (roundToPointFive(time) == timeToFire) {
+            // let level = Math.round(timeToFire / 15.0);
+            // for (let i = 0; i < level; level++) {
+            //     liquidDrops();
+            // }
             liquidDrops();
             timeToFire += 0.5;
         }
@@ -65,16 +69,16 @@ function gameLoop() {
             b.move(dt);
         }
 
-        // // Collisions between liquids and spider
-        // for (let b of liquids) {
-        //     if (rectsIntersect(b, spider)) {
-        //         hitSound.play();
-        //         gameScene.removeChild(b);
-        //         gameScene.removeChild(spider);
-        //         end();
-        //         return;
-        //     }
-        // }
+        // Collisions between liquids and spider
+        for (let b of liquids) {
+            if (rectsIntersect(b, spider)) {
+                hitSound.play();
+                gameScene.removeChild(b);
+                gameScene.removeChild(spider);
+                end();
+                return;
+            }
+        }
 
         //get rid of dead liquids
         liquids = liquids.filter(b => b.isAlive);
@@ -87,48 +91,63 @@ function liquidDrops() {
 
     switch (randomNum) {
         case liquidType.Water:
+            let water = new Liquid(division * randomNum, 0, 500, liquidType.Water);
             liquids.push(water);
             gameScene.addChild(water);
             waterDropSound.play();
             break;
 
-        case liquidType.lava:
+        case liquidType.Lava:
+            let lava = new Liquid(division * randomNum, 0, 500, liquidType.Lava);
+            lava.x = division * randomNum;
             liquids.push(lava);
             gameScene.addChild(lava);
             fireSound.play();
             break;
 
         case liquidType.Goo:
+            let goo = new Liquid(division * randomNum, 0, 500, liquidType.Goo);
+            goo.x = division * randomNum;
             liquids.push(goo);
             gameScene.addChild(goo);
             gooSound.play();
             break;
 
         case liquidType.Poison:
+            let poison = new Liquid(division * randomNum, 0, 500, liquidType.Poison);
+            poison.x = division * randomNum;
             liquids.push(poison);
             gameScene.addChild(poison);
             poisonSound.play();
             break;
 
         case liquidType.Chocolate:
+            let chocolate = new Liquid(division * randomNum, 0, 500, liquidType.Chocolate);
+            chocolate.x = division * randomNum;
             liquids.push(chocolate);
             gameScene.addChild(chocolate);
             chocolateSound.play();
             break;
 
         case liquidType.Pee:
+            let pee = new Liquid(division * randomNum, 0, 500, liquidType.Pee);
+            pee.x = division * randomNum;
             liquids.push(pee);
             gameScene.addChild(pee);
             peeSound.play();
             break;
 
         case liquidType.Ice:
+            let ice = new Liquid(division * randomNum, 0, 500, liquidType.Ice);
+            ice.x = division * randomNum;
             liquids.push(ice);
             gameScene.addChild(ice);
             liquidNitroSound.play();
             break;
 
         case liquidType.Milk:
+            let milk = new Liquid(division * randomNum, 0, 500, liquidType.Milk);
+            milk.x = division * randomNum;
             liquids.push(milk);
             gameScene.addChild(milk);
             milkSound.play();
