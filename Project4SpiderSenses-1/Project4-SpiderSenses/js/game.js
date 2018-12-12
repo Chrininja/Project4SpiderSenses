@@ -67,7 +67,7 @@ function liquidDrops(e) {
     // Pee
     else if(randomNum == 6)
     {
-        let pee = new Bullet(0x00FFFF, division * randomNum, 0);
+        let pee = new Bullet(0xFFFF00, division * randomNum, 0);
         bullets.push(pee);
         gameScene.addChild(pee);
         peeSound.play();
