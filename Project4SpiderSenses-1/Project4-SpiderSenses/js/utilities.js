@@ -1,4 +1,4 @@
-	// http://paulbourke.net/miscellaneous/interpolation/
+// http://paulbourke.net/miscellaneous/interpolation/
 	
 	// we use this to interpolate the ship towards the mouse position
 	function lerp(start, end, amt) {

@@ -79,29 +79,29 @@ function setup() {
         src: ['sounds/liquids/waterDrop.mp3']
     });
 
-    fire = new Howl({
+    fireSound = new Howl({
         src: ['sounds/liquids/fireball.mp3']
     });
 
-    goo = new Howl({
-        src: []
-    });
+    // goo = new Howl({
+    //     src: []
+    // });
 
-    poison = new Howl({
-        src: []
-    });
+    // poison = new Howl({
+    //     src: []
+    // });
 
-    chocolate = new Howl({
-        src: []
-    });
+    // chocolate = new Howl({
+    //     src: []
+    // });
 
-    pee = new Howl({
-        src: []
-    });
+    // pee = new Howl({
+    //     src: []
+    // });
 
-    liquidNitro = new Howl({
-        src: []
-    });
+    // liquidNitro = new Howl({
+    //     src: []
+    // });
 
     hitSound = new Howl({
         src: ['sounds/spider/say1.mp3']

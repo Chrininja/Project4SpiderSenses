@@ -38,9 +38,6 @@ function liquidDrops(e) {
         gameScene.addChild(fire);
         fireSound.play();
     }
-    
-
-    
 }
 
 function crawl(crawlAnimation) {
