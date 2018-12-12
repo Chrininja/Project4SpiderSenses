@@ -4,12 +4,11 @@ const keyboard = Object.freeze({
 	a: 65,
 	s: 83,
 	d: 68,
+	q: 81,
+	r: 82,
 	SHIFT: 16,
 	SPACE: 32,
-	LEFT: 37,
-	UP: 38,
-	RIGHT: 39,
-	DOWN: 40
+	ENTER: 10
 });
 
 // this is the "key daemon" that we poll every frame
@@ -27,7 +26,4 @@ window.onkeydown = (e) => {
 
 	// checking for other keys - ex. 'p' and 'P' for pausing
 	let char = String.fromCharCode(e.keyCode);
-	if (char == "p" || char == "P") {
-		// do something
-	}
 };

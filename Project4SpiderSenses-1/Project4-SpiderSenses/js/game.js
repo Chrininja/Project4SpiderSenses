@@ -1,4 +1,5 @@
 "use strict";
+
 // function loadSpriteSheet() {
 //     // http://pixi.js.download/dev/docs/PIXI.BaseTexture.html
 //     let spriteSheet = PIXI.BaseTexture.fromImage("images/spider-spritesheet.png");
@@ -17,12 +18,71 @@
 //     return textures;
 // }
 
-function liquidDrops(e) {
+// The actual game loop that runs when game plays
+function gameLoop() {
+    if (currentScene == gameState.GameScene) {
 
-    if (currentScene != "gameScene") {
-        return;
+        if (roundToPointFive(time) == timeToFire) {
+            liquidDrops();
+            timeToFire += 0.5;
+        }
+
+        // if (paused) return; // keep this commented out for now
+        // #1 - Calculate "delta time"
+        dt = 1 / app.ticker.FPS;
+        if (dt > 1 / 12) dt = 1 / 12;
+        increaseTimeBy(dt);
+
+        // #2 - Move Spider
+        let newX = spider.x;
+        let newY = spider.y;
+        let amt = spider.speed * dt;
+        let w2 = spider.width / 2;
+        let h2 = spider.height / 2;
+
+        // Animation Loop
+        app.ticker.add(() => {
+            // #2 - Check Keys
+            if (keys[keyboard.d]) {
+                newX += amt;
+            } else if (keys[keyboard.a]) {
+                newX -= amt;
+            }
+
+            if (keys[keyboard.s]) {
+                newY += amt;
+            } else if (keys[keyboard.w]) {
+                newY -= amt;
+            }
+
+            spider.update(newX, newY);
+        });
+
+        // crawl(crawlAnimation);
+
+        // Move Bullets
+        for (let b of bullets) {
+            b.move(dt);
+        }
+
+        // Collisions between bullets and spider
+        for (let b of bullets) {
+            if (rectsIntersect(b, spider)) {
+                hitSound.play();
+                gameScene.removeChild(b);
+                gameScene.removeChild(spider);
+                end();
+                return;
+            }
+        }
+
+        //get rid of dead bullets
+        bullets = bullets.filter(b => b.isAlive);
     }
-    //if (paused) return;
+}
+
+function liquidDrops() {
+
     let divider = 8;
     let division = sceneWidth / divider;
 
@@ -79,6 +139,7 @@ function liquidDrops(e) {
     }
 }
 
+// Sprite sheet animation
 function crawl(crawlAnimation) {
     gameScene.addChild(crawlAnimation);
     crawlAnimation.animationSpeed = 5 * dt;
@@ -86,4 +147,20 @@ function crawl(crawlAnimation) {
     crawlAnimation.onComplete = e => gameScene.removeChild(crawlAnimation);
     gameScene.addChild(crawlAnimation);
     crawlAnimation.play();
+}
+
+function gameOverLoop() {
+    if (currentScene == gameState.GameOverScene) {
+        app.ticker.add(() => {
+            // Enter to restart
+            if (keys[keyboard.r]) {
+                startGame();
+            }
+
+            // Q to return to the start scene
+            if (keys[keyboard.s]) {
+
+            }
+        });
+    }
 }

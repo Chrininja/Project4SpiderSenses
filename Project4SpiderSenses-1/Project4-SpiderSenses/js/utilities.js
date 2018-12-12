@@ -45,3 +45,14 @@ function getRandom(min, max) {
 function magnitude(x, y) {
 	return Math.sqrt(x * x, y * y);
 }
+
+// Function to keep increasing the time
+function increaseTimeBy(value) {
+	time += value;
+	let t = time.toFixed(2);
+	timeLabel.text = `Time ${t}`;
+}
+
+function roundToPointFive(value) {
+	return Math.round(value * 2) / 2;
+}
