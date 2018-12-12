@@ -5,7 +5,7 @@ let app = new PIXI.Application(800, 600, {
     backgroundColor: 0x808080
 });
 
-document.body.appendChild(app.view);
+document.querySelector("#game").appendChild(app.view);
 
 // constants
 const sceneWidth = app.view.width;
@@ -27,7 +27,7 @@ let startScene;
 let gameScene;
 let spider;
 let timeLabel;
-let waterDropSound;
+let waterDropSound, fire, goo, poison, chocolate, pee, liquidNitro;
 let hitSound;
 let gameOverScene;
 let gameOverTimeLabel;
@@ -74,8 +74,33 @@ function setup() {
     gameScene.addChild(spider);
 
     // #6 - Load Sounds
+    // waterDropSound, fire, goo, poison, chocolate, pee, liquidNitro;
     waterDropSound = new Howl({
         src: ['sounds/liquids/waterDrop.mp3']
+    });
+
+    fire = new Howl({
+        src: ['sounds/liquids/fireball.mp3']
+    });
+
+    goo = new Howl({
+        src: []
+    });
+
+    poison = new Howl({
+        src: []
+    });
+
+    chocolate = new Howl({
+        src: []
+    });
+
+    pee = new Howl({
+        src: []
+    });
+
+    liquidNitro = new Howl({
+        src: []
     });
 
     hitSound = new Howl({
@@ -291,7 +316,7 @@ function end() {
     bullets.forEach(b => gameScene.removeChild(b)); // ditto
     bullets = [];
 
-    gameOverTimeLabel.text = "Your Time: " + time.toFixed(2);
+    gameOverTimeLabel.text = "Your Time: " + time.toFixed(2) + " s";
     gameOverScene.visible = true;
     gameScene.visible = false;
 }

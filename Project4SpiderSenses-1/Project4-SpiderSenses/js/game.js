@@ -24,12 +24,23 @@ function liquidDrops(e) {
 
     let randomNum = Math.floor(Math.random() * divider) + 1;
 
-    let water;
-    water = new Bullet(0x538fef, division * randomNum, 0);
-    bullets.push(water);
+    if(randomNum == 1)
+    {
+        let water = new Bullet(0x538fef, division * randomNum, 0);
+        bullets.push(water);
+        gameScene.addChild(water);
+        waterDropSound.play();
+    }
+    else if(randomNum == 2)
+    {
+        let fire = new Bullet(0xFF0000, division * randomNum, 0);
+        bullets.push(fire);
+        gameScene.addChild(fire);
+        fireSound.play();
+    }
+    
 
-    gameScene.addChild(water);
-    waterDropSound.play();
+    
 }
 
 function crawl(crawlAnimation) {
