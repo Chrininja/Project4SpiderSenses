@@ -24,6 +24,7 @@ function liquidDrops(e) {
 
     let randomNum = Math.floor(Math.random() * divider) + 1;
 
+    // Water
     if(randomNum == 1)
     {
         let water = new Bullet(0x538fef, division * randomNum, 0);
@@ -31,12 +32,53 @@ function liquidDrops(e) {
         gameScene.addChild(water);
         waterDropSound.play();
     }
+    // Fire
     else if(randomNum == 2)
     {
         let fire = new Bullet(0xFF0000, division * randomNum, 0);
         bullets.push(fire);
         gameScene.addChild(fire);
         fireSound.play();
+    }
+    // Goo
+    else if(randomNum == 3)
+    {
+        let goo = new Bullet(0x00FF00, division * randomNum, 0);
+        bullets.push(goo);
+        gameScene.addChild(goo);
+        gooSound.play();
+    }
+    // Poison
+    else if(randomNum == 4)
+    {
+        let poison = new Bullet(0xFF00FF, division * randomNum, 0);
+        bullets.push(poison);
+        gameScene.addChild(poison);
+        poisonSound.play();
+    }
+    // Chocolate
+    else if(randomNum == 5)
+    {
+        let chocolate = new Bullet(0x654321, division * randomNum, 0);
+        bullets.push(chocolate);
+        gameScene.addChild(chocolate);
+        chocolateSound.play();
+    }
+    // Pee
+    else if(randomNum == 6)
+    {
+        let pee = new Bullet(0x00FFFF, division * randomNum, 0);
+        bullets.push(pee);
+        gameScene.addChild(pee);
+        peeSound.play();
+    }
+    // Liquid Nitrogen / Ice
+    else if(randomNum == 7)
+    {
+        let ice = new Bullet(0xA5F2F3, division * randomNum, 0);
+        bullets.push(ice);
+        gameScene.addChild(ice);
+        liquidNitroSound.play();
     }
 }
 

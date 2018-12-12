@@ -27,7 +27,7 @@ let startScene;
 let gameScene;
 let spider;
 let timeLabel;
-let waterDropSound, fire, goo, poison, chocolate, pee, liquidNitro;
+let waterDropSound, fireSound, gooSound, poisonSound, chocolateSound, peeSound, liquidNitroSound;
 let hitSound;
 let gameOverScene;
 let gameOverTimeLabel;
@@ -80,28 +80,28 @@ function setup() {
     });
 
     fireSound = new Howl({
-        src: ['sounds/liquids/fireball.mp3']
+        src: ['sounds/liquids/fire.mp3']
     });
 
-    // goo = new Howl({
-    //     src: []
-    // });
+    gooSound = new Howl({
+        src: ['sounds/liquids/goo.mp3']
+    });
 
-    // poison = new Howl({
-    //     src: []
-    // });
+    poisonSound = new Howl({
+        src: ['sounds/liquids/poison.mp3']
+    });
 
-    // chocolate = new Howl({
-    //     src: []
-    // });
+    chocolateSound = new Howl({
+        src: ['sounds/liquids/chocolate.mp3']
+    });
 
-    // pee = new Howl({
-    //     src: []
-    // });
+    peeSound = new Howl({
+        src: ['sounds/liquids/pee.mp3']
+    });
 
-    // liquidNitro = new Howl({
-    //     src: []
-    // });
+    liquidNitroSound = new Howl({
+        src: ['sounds/liquids/liquidNitro.mp3']
+    });
 
     hitSound = new Howl({
         src: ['sounds/spider/say1.mp3']
