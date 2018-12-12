@@ -42,8 +42,8 @@ class Liquid extends PIXI.Sprite {
 }
 
 class Background extends PIXI.Sprite {
-    constructor(x = 0, y = 0, width, height) {
-        super(PIXI.loader.resources["media/lab-background.png"].texture);
+    constructor(x = 0, y = 0, width, height, gameState) {
+        super(backgroundImgs[gameState]);
         this.x = x;
         this.y = y;
         this.width = width;

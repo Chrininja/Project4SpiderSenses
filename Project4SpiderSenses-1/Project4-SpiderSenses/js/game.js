@@ -19,6 +19,17 @@
 // }
 
 // The actual game loop that runs when game plays
+function startSceneLoop() {
+    if (currentScene == gameState.StartScene) {
+        app.ticker.add(() => {
+            // Enter to start
+            if (keys[keyboard.ENTER]) {
+                startGame();
+            }
+        });
+    }
+}
+
 function gameLoop() {
     if (currentScene == gameState.GameScene) {
 
@@ -174,8 +185,8 @@ function gameOverLoop() {
             }
 
             // Q to return to the start scene
-            if (keys[keyboard.s]) {
-
+            if (keys[keyboard.q]) {
+                quitGame();
             }
         });
     }

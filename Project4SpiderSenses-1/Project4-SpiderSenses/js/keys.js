@@ -8,7 +8,7 @@ const keyboard = Object.freeze({
 	r: 82,
 	SHIFT: 16,
 	SPACE: 32,
-	ENTER: 10
+	ENTER: 13
 });
 
 // this is the "key daemon" that we poll every frame

@@ -12,10 +12,10 @@ const sceneHeight = app.view.height;
 
 // Pre-load the images
 PIXI.loader.
-add(["media/lab-background.png", "media/spider.png", "media/liquids/chocolate.png",
-    "media/liquids/goo.png", "media/liquids/icicle.png", "media/liquids/lava.png",
-    "media/liquids/milk.png", "media/liquids/pee.png", "media/liquids/poison.png",
-    "media/liquids/water.png"
+add(["media/lab-background.png", "media/game-over-bg.jpg", "media/start-scene.png",
+    "media/spider.png", "media/liquids/chocolate.png", "media/liquids/goo.png",
+    "media/liquids/icicle.png", "media/liquids/lava.png", "media/liquids/milk.png",
+    "media/liquids/pee.png", "media/liquids/poison.png", "media/liquids/water.png"
 ]).on("progress", e => {
     console.log(`progress=${e.progress}`)
 }).
@@ -45,6 +45,8 @@ let stage;
 
 // Field for game variables
 let liquidsTextures = [];
+let backgroundImgs = [];
+
 let startScene;
 let gameScene;
 let spider;
@@ -54,7 +56,6 @@ let hitSound;
 let gameOverScene;
 let gameOverTimeLabel;
 let dt;
-let background;
 
 // Game Scene variables
 let divider = 8;
@@ -79,6 +80,11 @@ function setup() {
     //controlsScene.visible = false;
     //stage.addChild(controlsScene); 
 
+    // Load background images
+    backgroundImgs.push(PIXI.loader.resources["media/start-scene.png"].texture);
+    backgroundImgs.push(PIXI.loader.resources["media/lab-background.png"].texture);
+    backgroundImgs.push(PIXI.loader.resources["media/game-over-bg.jpg"].texture)
+
     // Load the liquid sprites
     liquidsTextures.push(PIXI.loader.resources["media/liquids/water.png"].texture);
     liquidsTextures.push(PIXI.loader.resources["media/liquids/lava.png"].texture);
@@ -93,20 +99,22 @@ function setup() {
     startScene = new PIXI.Container();
     stage.addChild(startScene);
     currentScene = gameState.StartScene;
+    let startSceneBg = new Background(0, 0, sceneWidth, sceneHeight, 0);
+    startScene.addChild(startSceneBg);
 
     // Create the main `game` scene and make it invisible
     gameScene = new PIXI.Container();
     gameScene.visible = false;
     stage.addChild(gameScene);
-
-    // Set the background for game scene
-    background = new Background(0, 0, sceneWidth, sceneHeight);
-    gameScene.addChild(background);
+    let gameSceneBg = new Background(0, 0, sceneWidth, sceneHeight, 1);
+    gameScene.addChild(gameSceneBg);
 
     // Create the `gameOver` scene and make it invisible
     gameOverScene = new PIXI.Container();
     gameOverScene.visible = false;
     stage.addChild(gameOverScene);
+    let gameOverBg = new Background(0, 0, sceneWidth, sceneHeight, 2);
+    gameOverScene.addChild(gameOverBg);
 
     // Create labels for all 3 scenes
     createLabelsAndButtons();
@@ -156,6 +164,7 @@ function setup() {
     // crawlAnimation = new PIXI.extras.AnimatedSprite(spiderTextures);
 
     // Start update loop
+    app.ticker.add(startSceneLoop);
     app.ticker.add(gameLoop);
     app.ticker.add(gameOverLoop);
 }
@@ -187,8 +196,6 @@ function createLabelsAndButtons() {
     howToPlay.style = buttonStyle;
     howToPlay.x = 80;
     howToPlay.y = sceneHeight - 250;
-    howToPlay.interactive = true;
-    howToPlay.buttonMode = true;
     startScene.addChild(howToPlay);
 
     // Start game button
@@ -196,11 +203,6 @@ function createLabelsAndButtons() {
     startButton.style = buttonStyle;
     startButton.x = 80;
     startButton.y = sceneHeight - 100;
-    startButton.interactive = true;
-    startButton.buttonMode = true;
-    startButton.on("pointerup", startGame); // startGame is a function reference
-    startButton.on('pointerover', e => e.target.alpha = 0.7) // concise arrow function with no brackets
-    startButton.on('ponterout', e => e.currentTarget.alpha = 1.0); // ditto
     startScene.addChild(startButton);
 
     // 2 - set up `gameScene`
@@ -241,19 +243,6 @@ function createLabelsAndButtons() {
     gameOverTimeLabel.y = sceneHeight / 2 - 50;
     gameOverScene.addChild(gameOverTimeLabel);
 
-    // // Make "play again?" button
-    // let playAgainButton = new PIXI.Text("Press Enter to Play Again");
-    // playAgainButton.style = buttonStyle;
-    // playAgainButton.x = sceneWidth / 4 + 80;
-    // playAgainButton.y = sceneHeight - 200;
-    // playAgainButton.interactive = true;
-    // playAgainButton.buttonMode = true;
-    // playAgainButton.on("pointerup", startGame); // startGame is a function reference
-    // playAgainButton.on('pointerover', e => e.target.alpha = 0.7); // concise arrow function with no brackets
-    // playAgainButton.on('pointerout', e => e.currentTarget.alpha = 1.0); // ditto
-    // gameOverScene.addChild(playAgainButton);
-
-
     let textStyle1 = new PIXI.TextStyle({
         fill: 0xFFFFFF,
         fontSize: 44,
@@ -276,6 +265,12 @@ function createLabelsAndButtons() {
     quitText.y = sceneHeight - 100;
 
     gameOverScene.addChild(quitText);
+}
+
+function quitGame() {
+    startScene.visible = true;
+    gameOverScene.visible = false;
+    gameScene.visible = false;
 }
 
 // Clicking the button calls startGame()
