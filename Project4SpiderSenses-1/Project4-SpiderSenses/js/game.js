@@ -60,82 +60,79 @@ function gameLoop() {
 
         // crawl(crawlAnimation);
 
-        // Move Bullets
-        for (let b of bullets) {
+        // Move liquids
+        for (let b of liquids) {
             b.move(dt);
         }
 
-        // Collisions between bullets and spider
-        for (let b of bullets) {
-            if (rectsIntersect(b, spider)) {
-                hitSound.play();
-                gameScene.removeChild(b);
-                gameScene.removeChild(spider);
-                end();
-                return;
-            }
-        }
+        // // Collisions between liquids and spider
+        // for (let b of liquids) {
+        //     if (rectsIntersect(b, spider)) {
+        //         hitSound.play();
+        //         gameScene.removeChild(b);
+        //         gameScene.removeChild(spider);
+        //         end();
+        //         return;
+        //     }
+        // }
 
-        //get rid of dead bullets
-        bullets = bullets.filter(b => b.isAlive);
+        //get rid of dead liquids
+        liquids = liquids.filter(b => b.isAlive);
     }
 }
 
 function liquidDrops() {
 
-    let divider = 8;
-    let division = sceneWidth / divider;
+    randomNum = Math.floor(Math.random() * divider) + 1;
 
-    let randomNum = Math.floor(Math.random() * divider) + 1;
+    switch (randomNum) {
+        case liquidType.Water:
+            liquids.push(water);
+            gameScene.addChild(water);
+            waterDropSound.play();
+            break;
 
-    // Water
-    if (randomNum == 1) {
-        let water = new Bullet(0x538fef, division * randomNum, 0);
-        bullets.push(water);
-        gameScene.addChild(water);
-        waterDropSound.play();
-    }
-    // Fire
-    else if (randomNum == 2) {
-        let fire = new Bullet(0xFF0000, division * randomNum, 0);
-        bullets.push(fire);
-        gameScene.addChild(fire);
-        fireSound.play();
-    }
-    // Goo
-    else if (randomNum == 3) {
-        let goo = new Bullet(0x00FF00, division * randomNum, 0);
-        bullets.push(goo);
-        gameScene.addChild(goo);
-        gooSound.play();
-    }
-    // Poison
-    else if (randomNum == 4) {
-        let poison = new Bullet(0xFF00FF, division * randomNum, 0);
-        bullets.push(poison);
-        gameScene.addChild(poison);
-        poisonSound.play();
-    }
-    // Chocolate
-    else if (randomNum == 5) {
-        let chocolate = new Bullet(0x654321, division * randomNum, 0);
-        bullets.push(chocolate);
-        gameScene.addChild(chocolate);
-        chocolateSound.play();
-    }
-    // Pee
-    else if (randomNum == 6) {
-        let pee = new Bullet(0xFFFF00, division * randomNum, 0);
-        bullets.push(pee);
-        gameScene.addChild(pee);
-        peeSound.play();
-    }
-    // Liquid Nitrogen / Ice
-    else if (randomNum == 7) {
-        let ice = new Bullet(0xA5F2F3, division * randomNum, 0);
-        bullets.push(ice);
-        gameScene.addChild(ice);
-        liquidNitroSound.play();
+        case liquidType.lava:
+            liquids.push(lava);
+            gameScene.addChild(lava);
+            fireSound.play();
+            break;
+
+        case liquidType.Goo:
+            liquids.push(goo);
+            gameScene.addChild(goo);
+            gooSound.play();
+            break;
+
+        case liquidType.Poison:
+            liquids.push(poison);
+            gameScene.addChild(poison);
+            poisonSound.play();
+            break;
+
+        case liquidType.Chocolate:
+            liquids.push(chocolate);
+            gameScene.addChild(chocolate);
+            chocolateSound.play();
+            break;
+
+        case liquidType.Pee:
+            liquids.push(pee);
+            gameScene.addChild(pee);
+            peeSound.play();
+            break;
+
+        case liquidType.Ice:
+            liquids.push(ice);
+            gameScene.addChild(ice);
+            liquidNitroSound.play();
+            break;
+
+        case liquidType.Milk:
+            liquids.push(milk);
+            gameScene.addChild(milk);
+            milkSound.play();
+            break;
     }
 }
 

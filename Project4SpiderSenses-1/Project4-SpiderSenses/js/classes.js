@@ -1,7 +1,7 @@
 "use strict";
 class Spider extends PIXI.Sprite {
     constructor(x = 0, y = 0, speed = 100) {
-        super(PIXI.loader.resources["images/spider1.png"].texture);
+        super(PIXI.loader.resources["media/spider.png"].texture);
         this.anchor.set(0.5, 0.5); // position, scaling, rotating etc are now from center of sprite
         this.scale.set(0.1);
         this.speed = speed;
@@ -43,12 +43,11 @@ class Circle extends PIXI.Graphics {
     }
 }
 
-class Bullet extends PIXI.Graphics {
-    constructor(color = 0xFFFFFF, x = 0, y = 0) {
-        super();
-        this.beginFill(color);
-        this.drawRect(-40, -40, 40, 40);
-        this.endFill();
+class Liquid extends PIXI.Sprite {
+    constructor(x = 0, y = 0, speed = 600, liquidType = 1) {
+        super(liquidsTextures[liquidType - 1]);
+        this.anchor.set(0.5, 0.5);
+        this.scale.set(0.1);
         this.x = x;
         this.y = y;
         //variables
@@ -58,7 +57,6 @@ class Bullet extends PIXI.Graphics {
         };
         this.speed = 600;
         this.isAlive = true;
-        Object.seal(this);
     }
 
     move(dt = 1 / 60) {

@@ -12,8 +12,10 @@ const sceneHeight = app.view.height;
 
 // Pre-load the images
 PIXI.loader.
-add(["images/spider1.png", "images/explosions.png"]).
-on("progress", e => {
+add(["media/spider.png", "media/liquids/chocolate.png", "media/liquids/goo.png",
+    "media/liquids/icicle.png", "media/liquids/lava.png", "media/liquids/milk.png",
+    "media/liquids/pee.png", "media/liquids/poison.png", "media/liquids/water.png"
+]).on("progress", e => {
     console.log(`progress=${e.progress}`)
 }).
 load(setup);
@@ -27,33 +29,47 @@ const gameState = Object.freeze({
 });
 
 const liquidType = Object.freeze({
-
+    Water: 1,
+    Lava: 2,
+    Goo: 3,
+    Poison: 4,
+    Chocolate: 5,
+    Pee: 6,
+    Ice: 7,
+    Milk: 8
 });
 
 // Aliases
 let stage;
 
 // Field for game variables
+let liquidsTextures = [];
 let startScene;
 let gameScene;
 let spider;
 let timeLabel;
-let waterDropSound, fireSound, gooSound, poisonSound, chocolateSound, peeSound, liquidNitroSound;
+let waterDropSound, fireSound, gooSound, poisonSound, chocolateSound, peeSound, liquidNitroSound, milkSound;
 let hitSound;
 let gameOverScene;
 let gameOverTimeLabel;
 let dt;
 
+// Game Scene variables
+let divider = 8;
+let division = sceneWidth / divider;
+let randomNum;
+
 let circles = [];
-let bullets = [];
-let aliens = [];
-let explosions = [];
+let liquids = [];
 let spiderTextures;
 let crawlAnimation;
 let time = 0;
 let timeToFire = 0;
 let paused = true;
 let currentScene;
+
+// Game Objects
+let water, lava, goo, poison, chocolate, pee, ice, milk;
 
 /// Set up the scenes
 function setup() {
@@ -63,6 +79,16 @@ function setup() {
     //controlsScene = new PIXI.Container();
     //controlsScene.visible = false;
     //stage.addChild(controlsScene); 
+
+    // Load the liquid sprites
+    liquidsTextures.push(PIXI.loader.resources["media/liquids/water.png"].texture);
+    liquidsTextures.push(PIXI.loader.resources["media/liquids/lava.png"].texture);
+    liquidsTextures.push(PIXI.loader.resources["media/liquids/goo.png"].texture);
+    liquidsTextures.push(PIXI.loader.resources["media/liquids/poison.png"].texture);
+    liquidsTextures.push(PIXI.loader.resources["media/liquids/chocolate.png"].texture);
+    liquidsTextures.push(PIXI.loader.resources["media/liquids/pee.png"].texture);
+    liquidsTextures.push(PIXI.loader.resources["media/liquids/icicle.png"].texture);
+    liquidsTextures.push(PIXI.loader.resources["media/liquids/milk.png"].texture);
 
     // Create the `start` scene
     startScene = new PIXI.Container();
@@ -84,6 +110,15 @@ function setup() {
 
     spider = new Spider(300, 250, 200);
 
+    // Load game objects
+    water = new Liquid(division * randomNum, 0, 500, liquidType.Water);
+    lava = new Liquid(division * randomNum, 0, 500, liquidType.Lava);
+    goo = new Liquid(division * randomNum, 0, 500, liquidType.Goo);
+    poison = new Liquid(division * randomNum, 0, 500, liquidType.Poison);
+    chocolate = new Liquid(division * randomNum, 0, 500, liquidType.Chocolate);
+    pee = new Liquid(division * randomNum, 0, 500, liquidType.Pee);
+    ice = new Liquid(division * randomNum, 0, 500, liquidType.Ice);
+    milk = new Liquid(division * randomNum, 0, 500, liquidType.Milk);
 
     // Load Sounds
     // waterDropSound, fire, goo, poison, chocolate, pee, liquidNitro;
@@ -113,6 +148,10 @@ function setup() {
 
     liquidNitroSound = new Howl({
         src: ['sounds/liquids/liquidNitro.mp3']
+    });
+
+    milkSound = new Howl({
+        src: ['sounds/liquids/milk.mp3']
     });
 
     hitSound = new Howl({
@@ -265,8 +304,8 @@ function end() {
     currentScene = gameState.GameOverScene;
 
     // clear out the level
-    bullets.forEach(b => gameScene.removeChild(b)); // ditto
-    bullets = [];
+    liquids.forEach(b => gameScene.removeChild(b)); // ditto
+    liquids = [];
 
     gameOverTimeLabel.text = "Your Time: " + time.toFixed(2) + " s";
     startScene.visible = false;
