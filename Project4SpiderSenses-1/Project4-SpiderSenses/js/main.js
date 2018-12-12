@@ -43,6 +43,7 @@ let crawlAnimation;
 let time = 0;
 let levelNum = 1;
 let paused = true;
+let currentScene;
 
 /// Set up the scenes
 function setup() {
@@ -56,6 +57,7 @@ function setup() {
     // #1 - Create the `start` scene
     startScene = new PIXI.Container();
     stage.addChild(startScene);
+    currentScene = "startScene";
 
     // #2 - Create the main `game` scene and make it invisible
     gameScene = new PIXI.Container();
@@ -70,9 +72,8 @@ function setup() {
     // #4 - Create labels for all 3 scenes
     createLabelsAndButtons();
 
-    // #5 - Create spider
     spider = new Spider(300, 250, 200);
-    gameScene.addChild(spider);
+    
 
     // #6 - Load Sounds
     // waterDropSound, fire, goo, poison, chocolate, pee, liquidNitro;
@@ -131,13 +132,13 @@ function createLabelsAndButtons() {
     // The title
     let title = new PIXI.Text("Spider Senses");
     title.style = new PIXI.TextStyle({
-        fill: 0xFFFFFF,
+        fill: 0xBA55D3,
         fontSize: 85,
         fontFamily: 'Futura',
         stoke: 0xFF0000,
         strokeThickness: 6
     });
-    title.x = 50;
+    title.x = sceneWidth / 4 - 50;
     title.y = 120;
     startScene.addChild(title);
 
@@ -189,36 +190,53 @@ function createLabelsAndButtons() {
         strokeThickness: 6
     });
     gameOverText.style = textStyle;
-    gameOverText.x = 5;
+    gameOverText.x = sceneWidth / 2 - 160;
     gameOverText.y = sceneHeight / 2 - 160;
     gameOverScene.addChild(gameOverText);
 
     // Actual time
     gameOverTimeLabel = new PIXI.Text();
     gameOverTimeLabel.style = textStyle;
-    gameOverTimeLabel.x = 5;
-    gameOverTimeLabel.y = sceneHeight / 2 + 50;
+    gameOverTimeLabel.x = sceneWidth / 2 - 260;
+    gameOverTimeLabel.y = sceneHeight / 2 - 50;
     gameOverScene.addChild(gameOverTimeLabel);
 
-    // 3B - make "play again?" button
-    let playAgainButton = new PIXI.Text("Play Again?");
+    // Make "play again?" button
+    let playAgainButton = new PIXI.Text("Press Enter to Play Again");
     playAgainButton.style = buttonStyle;
-    playAgainButton.x = 150;
-    playAgainButton.y = sceneHeight - 100;
+    playAgainButton.x = sceneWidth / 4 + 80;
+    playAgainButton.y = sceneHeight - 200;
     playAgainButton.interactive = true;
     playAgainButton.buttonMode = true;
     playAgainButton.on("pointerup", startGame); // startGame is a function reference
     playAgainButton.on('pointerover', e => e.target.alpha = 0.7); // concise arrow function with no brackets
     playAgainButton.on('pointerout', e => e.currentTarget.alpha = 1.0); // ditto
     gameOverScene.addChild(playAgainButton);
+
+    
+    let textStyle1 = new PIXI.TextStyle({
+        fill: 0xFFFFFF,
+        fontSize: 44,
+        fontFamily: "Futura",
+        stroke: 0x000000,
+        strokeThickness: 6
+    });
+
+    // Make play again text
+    let playAgainText = new PIXI.Text("Press Enter to Play Again");
+    playAgainText.style = textStyle1;
+    playAgainText.x = sceneWidth / 4 + 80;
+    playAgainText.y = sceneHeight - 200;
+    gameOverScene.addChild(playAgainText);
+
+    // Make quit text
+    let quitText = new PIXI.Text("Press Q to Quit");
+    quitText.style = textStyle1;
+    quitText.x = sceneWidth / 4 + 80;
+    quitText.y = sceneHeight - 100;
+    gameOverScene.addChild(quitText);
 }
 
-// Function to start the game
-function startGame() {
-    startScene.visible = false;
-    gameOverScene.visible = false;
-    gameScene.visible = true;
-}
 
 // Function to keep increasing the time
 function increaseTimeBy(value) {
@@ -288,36 +306,31 @@ function gameLoop() {
 
     // get rid of explosions
     explosions = explosions.filter(e => e.playing);
-
-
-    // #8 - Load next level
-    if (circles.length == 0) {
-        levelNum++;
-        loadLevel();
-    }
-
-}
-
-function loadLevel() {
-    paused = false;
 }
 
 // Clicking the button calls startGame()
 function startGame() {
+    gameScene.addChild(spider);
+    spider.x = 450;
+    spider.y = sceneHeight - 30;
+    time = 0;
+    currentScene = "gameScene";
     startScene.visible = false;
     gameOverScene.visible = false;
     gameScene.visible = true;
-    time = 0;
+    
 }
 
 function end() {
-    paused = true;
+    //paused = true;
+    currentScene = "gameOverScene"
 
     // clear out the level
     bullets.forEach(b => gameScene.removeChild(b)); // ditto
     bullets = [];
 
     gameOverTimeLabel.text = "Your Time: " + time.toFixed(2) + " s";
+    startScene.visible = false;
     gameOverScene.visible = true;
     gameScene.visible = false;
 }

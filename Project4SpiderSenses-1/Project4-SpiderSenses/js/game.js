@@ -19,6 +19,10 @@
 
 function liquidDrops(e) {
 
+    if(currentScene!="gameScene")
+    {
+        return;
+    }
     //if (paused) return;
     let divider = 8;
     let division = sceneWidth / divider;
