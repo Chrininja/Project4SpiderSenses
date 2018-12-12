@@ -73,7 +73,7 @@ function setup() {
     createLabelsAndButtons();
 
     spider = new Spider(300, 250, 200);
-    
+
 
     // #6 - Load Sounds
     // waterDropSound, fire, goo, poison, chocolate, pee, liquidNitro;
@@ -213,7 +213,7 @@ function createLabelsAndButtons() {
     playAgainButton.on('pointerout', e => e.currentTarget.alpha = 1.0); // ditto
     gameOverScene.addChild(playAgainButton);
 
-    
+
     let textStyle1 = new PIXI.TextStyle({
         fill: 0xFFFFFF,
         fontSize: 44,
@@ -318,7 +318,7 @@ function startGame() {
     startScene.visible = false;
     gameOverScene.visible = false;
     gameScene.visible = true;
-    
+
 }
 
 function end() {
