@@ -12,10 +12,11 @@ const sceneHeight = app.view.height;
 
 // Pre-load the images
 PIXI.loader.
-add(["media/lab-background.png", "media/game-over-bg.jpg", "media/start-scene.png",
+add(["media/lab-background.png", "media/game-over-bg.png", "media/start-scene.png",
     "media/spider.png", "media/liquids/chocolate.png", "media/liquids/goo.png",
     "media/liquids/icicle.png", "media/liquids/lava.png", "media/liquids/milk.png",
-    "media/liquids/pee.png", "media/liquids/poison.png", "media/liquids/water.png"
+    "media/liquids/pee.png", "media/liquids/poison.png", "media/liquids/water.png",
+    "media/jarreal.png"
 ]).on("progress", e => {
     console.log(`progress=${e.progress}`)
 }).
@@ -49,6 +50,7 @@ let backgroundImgs = [];
 
 let startScene;
 let gameScene;
+let controlsScene;
 let spider;
 let timeLabel;
 let waterDropSound, fireSound, gooSound, poisonSound, chocolateSound, peeSound, liquidNitroSound, milkSound;
@@ -83,7 +85,8 @@ function setup() {
     // Load background images
     backgroundImgs.push(PIXI.loader.resources["media/start-scene.png"].texture);
     backgroundImgs.push(PIXI.loader.resources["media/lab-background.png"].texture);
-    backgroundImgs.push(PIXI.loader.resources["media/game-over-bg.jpg"].texture)
+    backgroundImgs.push(PIXI.loader.resources["media/game-over-bg.png"].texture);
+    backgroundImgs.push(PIXI.loader.resources["media/jarreal.png"].texture);
 
     // Load the liquid sprites
     liquidsTextures.push(PIXI.loader.resources["media/liquids/water.png"].texture);
@@ -101,13 +104,22 @@ function setup() {
     currentScene = gameState.StartScene;
     let startSceneBg = new Background(0, 0, sceneWidth, sceneHeight, 0);
     startScene.addChild(startSceneBg);
-
+    
     // Create the main `game` scene and make it invisible
     gameScene = new PIXI.Container();
     gameScene.visible = false;
     stage.addChild(gameScene);
     let gameSceneBg = new Background(0, 0, sceneWidth, sceneHeight, 1);
+    let jar = new Background(100, 50, sceneWidth * 0.8, sceneHeight -30, 3);
     gameScene.addChild(gameSceneBg);
+    gameScene.addChild(jar);
+
+    // Create the `controls` scene
+    controlsScene = new PIXI.Container();
+    controlsScene.visible = false;
+    stage.addChild(controlsScene);
+    let controlsSceneBg = new Background(0, 0, sceneWidth, sceneHeight, 1);
+    controlsScene.addChild(controlsSceneBg);
 
     // Create the `gameOver` scene and make it invisible
     gameOverScene = new PIXI.Container();
@@ -171,108 +183,174 @@ function setup() {
     app.ticker.add(startSceneLoop);
     app.ticker.add(gameLoop);
     app.ticker.add(gameOverLoop);
+    app.ticker.add(controlsLoop);
 }
 
 // For creatings labels and buttons
 function createLabelsAndButtons() {
-    let buttonStyle = new PIXI.TextStyle({
-        fill: 0xFFFFFF,
-        fontSize: 48,
-        fontFamily: "Futura"
-    });
-
     // Start Scene
     // The title
     let title = new PIXI.Text("Spider Senses");
     title.style = new PIXI.TextStyle({
         fill: 0xBA55D3,
-        fontSize: 85,
+        fontSize: 100,
         fontFamily: 'Futura',
         stoke: 0xFF0000,
-        strokeThickness: 6
+        strokeThickness: 12
     });
-    title.x = sceneWidth / 4 - 50;
+    title.x = sceneWidth / 4 - 70;
     title.y = 120;
     startScene.addChild(title);
 
-    // How to play button
-    let howToPlay = new PIXI.Text("How To Play");
-    howToPlay.style = buttonStyle;
-    howToPlay.x = 80;
-    howToPlay.y = sceneHeight - 250;
+    let playStyle = new PIXI.TextStyle({
+        fill: 0xe75480,
+        fontSize: 50,
+        fontFamily: "Arial",
+        stroke: 0x000000,
+        strokeThickness:4
+    });
+
+    // How to play text
+    let howToPlay = new PIXI.Text("Press C for Controls");
+    howToPlay.style = playStyle;
+    howToPlay.x = 200;
+    howToPlay.y = sceneHeight - 140;
     startScene.addChild(howToPlay);
 
-    // Start game button
+    // Start game text
     let startButton = new PIXI.Text("Press Enter to Play");
-    startButton.style = buttonStyle;
-    startButton.x = 80;
-    startButton.y = sceneHeight - 100;
+    startButton.style = playStyle;
+    startButton.x = 200;
+    startButton.y = sceneHeight - 260;
     startScene.addChild(startButton);
 
     // 2 - set up `gameScene`
     let textStyle = new PIXI.TextStyle({
         fill: 0xFFFFFF,
-        fontSize: 18,
+        fontSize: 30,
         fontFamily: "Futura",
         stroke: 0xFF0000,
         strokeThickness: 4
     });
 
-    // 2A - make time label
+    // Make time label
     timeLabel = new PIXI.Text("Time " + time);
-    timeLabel.style = textStyle;
+    timeLabel.style = new PIXI.TextStyle({
+        fill: 0xBEFF00,
+        fontSize: 50,
+        fontFamily: "Futura",
+        stroke: 0x000000,
+        strokeThickness: 6
+    });
     timeLabel.x = 5;
     timeLabel.y = 5;
     gameScene.addChild(timeLabel);
 
-    // 3 - set up `gameOverScene`
-    // 3A - make game over text
-    let gameOverText = new PIXI.Text("Game Over!");
+    // Game Over Text    
     textStyle = new PIXI.TextStyle({
-        fill: 0xFFFFFF,
-        fontSize: 64,
+        fill: 0xBE0000,
+        fontSize: 90,
         fontFamily: "Futura",
-        stroke: 0xFF0000,
+        stroke: 0x000000,
         strokeThickness: 6
     });
+    let gameOverText = new PIXI.Text("Game Over!");
     gameOverText.style = textStyle;
-    gameOverText.x = sceneWidth / 2 - 160;
-    gameOverText.y = sceneHeight / 2 - 160;
+    gameOverText.x = sceneWidth / 4;
+    gameOverText.y = sceneHeight / 12;
     gameOverScene.addChild(gameOverText);
 
     // Actual time
     gameOverTimeLabel = new PIXI.Text();
     gameOverTimeLabel.style = textStyle;
-    gameOverTimeLabel.x = sceneWidth / 2 - 260;
+    gameOverTimeLabel.x = sceneWidth / 12 + 30;
     gameOverTimeLabel.y = sceneHeight / 2 - 50;
     gameOverScene.addChild(gameOverTimeLabel);
 
-    let textStyle1 = new PIXI.TextStyle({
-        fill: 0xFFFFFF,
+    let overStyle = new PIXI.TextStyle({
+        fill: 0x016699,
         fontSize: 44,
-        fontFamily: "Futura",
+        fontFamily: "Arial",
         stroke: 0x000000,
-        strokeThickness: 6
+        strokeThickness: 4
     });
 
     // Make play again text
     let playAgainText = new PIXI.Text("Press R to Play Again");
-    playAgainText.style = textStyle1;
-    playAgainText.x = sceneWidth / 4 + 80;
-    playAgainText.y = sceneHeight - 200;
+    playAgainText.style = overStyle;
+    playAgainText.x = sceneWidth / 4;
+    playAgainText.y = sceneHeight - 175;
     gameOverScene.addChild(playAgainText);
 
     // Make quit text
     let quitText = new PIXI.Text("Press Q to Quit");
-    quitText.style = textStyle1;
-    quitText.x = sceneWidth / 4 + 80;
+    quitText.style = overStyle;
+    quitText.x = sceneWidth / 4;
     quitText.y = sceneHeight - 100;
-
     gameOverScene.addChild(quitText);
+
+    // Make how to play text
+    let howToTitleCtor = new PIXI.TextStyle({
+        fill: 0xFFFF00,
+        fontSize: 90,
+        fontFamily: "Futura",
+        stroke: 0x000000,
+        strokeThickness: 6
+    });
+    let howToTitle = new PIXI.Text("How To Play");
+    howToTitle.style = howToTitleCtor;
+    howToTitle.x = sceneWidth / 5 + 10;
+    howToTitle.y = 35;
+    controlsScene.addChild(howToTitle);
+
+    // Make instructions
+    let controlTxtStyle = new PIXI.TextStyle({
+        fill: 0xFFFFFF,
+        fontSize: 40,
+        fontFamily: "Arial",
+        stroke: 0x000000,
+        strokeThickness: 5
+    });
+    let instructions = new PIXI.Text("- Spider crawls around the\ncontainer with the WASD keys." + 
+    "\n\n- Your goal is to survive the\nlongest time by avoiding the\nlethal liquids falling from above.");
+    instructions.style = controlTxtStyle;
+    instructions.x = sceneWidth / 6;
+    instructions.y = sceneHeight / 4 + 20;
+    controlsScene.addChild(instructions);
+
+    let sGoBack = new PIXI.Text("Press Q to go back");
+    sGoBack.style = new PIXI.TextStyle({
+        fill: 0xe75480,
+        fontSize: 50,
+        fontFamily: 'Futura',
+        stoke: 0xFF0000,
+        strokeThickness: 4
+    });
+    sGoBack.x = sceneWidth / 4;
+    sGoBack.y = sceneHeight - 100;
+    controlsScene.addChild(sGoBack);
 }
 
 function quitGame() {
+    currentScene = gameState.StartScene;
     startScene.visible = true;
+    controlsScene.visible = false;
+    gameOverScene.visible = false;
+    gameScene.visible = false;
+}
+
+function viewControls(){
+    currentScene = gameState.ControlScene;
+    startScene.visible = false;
+    controlsScene.visible = true;
+    gameOverScene.visible = false;
+    gameScene.visible = false;
+}
+
+function fromControlsToStart(){
+    currentScene = gameState.StartScene;
+    startScene.visible = true;
+    controlsScene.visible = false;
     gameOverScene.visible = false;
     gameScene.visible = false;
 }
@@ -283,7 +361,7 @@ function startGame() {
 
     gameScene.addChild(spider);
     spider.x = 450;
-    spider.y = sceneHeight - 30;
+    spider.y = sceneHeight - 50;
     time = 0;
     timeToFire = 0.5;
     startScene.visible = false;
@@ -303,6 +381,7 @@ function end() {
     loseSound.play();
     gameOverTimeLabel.text = "Your Time: " + time.toFixed(2) + " s";
     startScene.visible = false;
+    controlsScene.visible = false;
     gameOverScene.visible = true;
     gameScene.visible = false;
 }

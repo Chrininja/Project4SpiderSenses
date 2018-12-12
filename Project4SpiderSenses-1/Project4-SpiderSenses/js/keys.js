@@ -6,6 +6,7 @@ const keyboard = Object.freeze({
 	d: 68,
 	q: 81,
 	r: 82,
+	c: 67,
 	SHIFT: 16,
 	SPACE: 32,
 	ENTER: 13

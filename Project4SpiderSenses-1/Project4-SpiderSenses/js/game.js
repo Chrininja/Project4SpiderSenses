@@ -26,6 +26,9 @@ function startSceneLoop() {
             if (keys[keyboard.ENTER]) {
                 startGame();
             }
+            else if(keys[keyboard.c]){
+                viewControls();
+            }
         });
     }
 }
@@ -179,7 +182,7 @@ function crawl(crawlAnimation) {
 function gameOverLoop() {
     if (currentScene == gameState.GameOverScene) {
         app.ticker.add(() => {
-            // Enter to restart
+            // R to restart
             if (keys[keyboard.r]) {
                 startGame();
             }
@@ -187,6 +190,17 @@ function gameOverLoop() {
             // Q to return to the start scene
             if (keys[keyboard.q]) {
                 quitGame();
+            }
+        });
+    }
+}
+
+function controlsLoop(){
+    if(currentScene == gameState.ControlScene){
+        app.ticker.add(()=>{
+            // C to go back to start scene
+            if(keys[keyboard.q]){
+                fromControlsToStart();
             }
         });
     }

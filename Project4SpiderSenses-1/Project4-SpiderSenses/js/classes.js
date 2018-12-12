@@ -14,8 +14,8 @@ class Spider extends PIXI.Sprite {
     }
 
     update(newX, newY) {
-        this.x = clamp(newX, this.w2, sceneWidth - this.w2);
-        this.y = clamp(newY, this.h2, sceneHeight - this.h2);
+        this.x = clamp(newX, 150, sceneWidth - 100);
+        this.y = clamp(newY, this.h2, sceneHeight - 50);
     }
 }
 
