@@ -52,7 +52,7 @@ let gameScene;
 let spider;
 let timeLabel;
 let waterDropSound, fireSound, gooSound, poisonSound, chocolateSound, peeSound, liquidNitroSound, milkSound;
-let hitSound;
+let hitSound, loseSound;
 let gameOverScene;
 let gameOverTimeLabel;
 let dt;
@@ -157,6 +157,10 @@ function setup() {
 
     hitSound = new Howl({
         src: ['sounds/spider/say1.mp3']
+    });
+
+    loseSound = new Howl({
+        src: ['sounds/spider/lose.mp3']
     });
 
     // Load spider spritesheet
@@ -296,6 +300,7 @@ function end() {
     liquids.forEach(b => gameScene.removeChild(b)); // ditto
     liquids = [];
 
+    loseSound.play();
     gameOverTimeLabel.text = "Your Time: " + time.toFixed(2) + " s";
     startScene.visible = false;
     gameOverScene.visible = true;
