@@ -1,20 +1,21 @@
-function loadSpriteSheet() {
-    // http://pixi.js.download/dev/docs/PIXI.BaseTexture.html
-    let spriteSheet = PIXI.BaseTexture.fromImage("images/spider-spritesheet.png");
-    let width = 120;
-    let height = 148;
-    let rowFrames = 4;
-    let colFrames = 5;
-    let textures = [];
-    for (let i = 0; i < colFrames; i++) {
-        for (let j = 0; j < rowFrames; j++) {
-            // http://pixijs.download/dev/docs/PIXI.Texture.html
-            let frame = new PIXI.Texture(spriteSheet, new PIXI.Rectangle(i * width, j * height, width, height));
-            textures.push(frame);
-        }
-    }
-    return textures;
-}
+"use strict";
+// function loadSpriteSheet() {
+//     // http://pixi.js.download/dev/docs/PIXI.BaseTexture.html
+//     let spriteSheet = PIXI.BaseTexture.fromImage("images/spider-spritesheet.png");
+//     let width = 120;
+//     let height = 148;
+//     let rowFrames = 4;
+//     let colFrames = 5;
+//     let textures = [];
+//     for (let i = 0; i < colFrames; i++) {
+//         for (let j = 0; j < rowFrames; j++) {
+//             // http://pixijs.download/dev/docs/PIXI.Texture.html
+//             let frame = new PIXI.Texture(spriteSheet, new PIXI.Rectangle(i * width, j * height, width, height));
+//             textures.push(frame);
+//         }
+//     }
+//     return textures;
+// }
 
 function liquidDrops(e) {
 

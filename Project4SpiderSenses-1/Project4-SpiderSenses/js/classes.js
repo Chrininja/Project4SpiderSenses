@@ -1,3 +1,4 @@
+"use strict";
 class Spider extends PIXI.Sprite {
     constructor(x = 0, y = 0, speed = 100) {
         super(PIXI.loader.resources["images/spider1.png"].texture);

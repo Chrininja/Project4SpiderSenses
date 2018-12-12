@@ -1,6 +1,7 @@
+"use strict";
 // We will use `strict mode`, which helps us by having the browser catch many common JS mistakes
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode
-"use strict";
+
 let app = new PIXI.Application(800, 600, {
     backgroundColor: 0x808080
 });
@@ -108,8 +109,8 @@ function setup() {
     });
 
     // #7 - Load spider spritesheet
-    spiderTextures = loadSpriteSheet();
-    crawlAnimation = new PIXI.extras.AnimatedSprite(spiderTextures);
+    // spiderTextures = loadSpriteSheet();
+    // crawlAnimation = new PIXI.extras.AnimatedSprite(spiderTextures);
 
     // #8 - Start update loop
     app.ticker.add(gameLoop);
@@ -247,7 +248,7 @@ function gameLoop() {
         // #2 - Check Keys
         if (keys[keyboard.RIGHT] || keys[keyboard.d]) {
             newX += amt;
-        } else if (keys[keyboard.LEFT || keys[keyboard.a]]) {
+        } else if (keys[keyboard.LEFT] || keys[keyboard.a]) {
             newX -= amt;
         }
 
@@ -260,7 +261,7 @@ function gameLoop() {
         spider.update(newX, newY);
     });
 
-    crawl(crawlAnimation);
+    // crawl(crawlAnimation);
 
     // #4 - Move Bullets
     for (let b of bullets) {
