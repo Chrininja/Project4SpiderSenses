@@ -1,0 +1,288 @@
+@import url('https://fonts.googleapis.com/css?family=Open+Sans:400,800');
+
+
+.homieSpider
+{
+	width:100%;
+	display:block;
+}
+
+.homiePhoneSpider
+{
+	display: none;
+}
+
+.spiderIndex
+{
+	width:100%;
+	display:block;
+}
+
+.spiderIndexSmall
+{
+	display:none;
+}
+
+.spiderGame
+{
+	width:100%;
+	display:block;
+}
+
+.spiderGameSmall
+{
+	display:none;
+}
+
+.tutorial
+{
+	display:block;
+	width:100%;
+}
+
+.tutorialSmall
+{
+	display:none;
+}
+
+.liquid
+{
+	display:block;
+	width:100%;
+}
+
+.liquidSmall
+{
+	display:none;
+}
+
+
+body
+{
+	background-color:#FFC4CD;
+	color:#581458;
+	font-family: 'Open Sans', sans-serif;
+	margin-left:25%;
+	margin-right:25%;
+	margin-top:5%;
+	margin-bottom:5%;
+}
+
+header
+{
+    text-align: center;
+    font-size:30px;
+}
+
+h1
+{
+	/*border: 3px solid #581458;
+	border-radius:10px;*/
+	display:inline-block;
+	margin:auto;
+	text-align:center;
+	padding:5px;
+}
+
+h2
+{
+	font-weight:800;
+	margin-top: 42px;
+}
+
+h3
+{
+    font-weight:800;
+    margin-top:42px;
+}
+
+/*Html*/
+.homePic
+{
+	margin-left:10%;
+	margin-right:10%;
+    text-align: center;
+}
+
+/*Navigation Bar*/
+ul#navlist
+{
+	margin-left: 0;
+	padding-left: 0;
+	white-space: nowrap;
+	text-align: center;
+    font-size: 30px;
+}
+
+#navlist li
+{
+	display: inline;
+	list-style-type: none;	
+	border: 3px solid #581458;
+	padding-top: 3px;
+	padding-bottom: 3px;
+	margin-left: 5px;
+    margin-right: 5px;
+	margin-bottom: 5px;
+    cursor: pointer;
+}
+
+#navlist a
+{
+	padding: 3px 10px;
+}
+
+#navlist a:link, 
+#navlist a:visited
+{
+	color: #4B0082;
+	background-color: #BA55D3;
+	text-decoration: none;
+}
+
+#navlist a:hover
+{
+	color: #8A2BE2;
+	background-color: #FF00FF;
+	text-decoration: none;
+}
+
+#navlist #active a:hover
+{
+    color: #8A2BE2;
+    background-color: #FFFFFF;
+}
+
+#navlist li a#current
+{
+	background: white;
+}
+
+/*Links*/
+a
+{
+	color:#800000;
+	text-decoration:none;
+	font-weight:600;
+}
+
+a:hover
+{
+    color:#8A2BE2;
+    text-decoration:underline;
+	font-weight:600;
+}
+
+
+
+/* Media Queries */
+@media screen and (max-width: 980px)
+{
+
+	.homieSpider
+	{
+		display:none;
+	}
+
+	.homiePhoneSpider
+	{
+		display: block;
+		width:100%;
+	}
+	
+	.spiderIndex
+	{
+		display:none;
+	}
+
+	.spiderIndexSmall
+	{
+		display:block;
+		width:100%;
+	}
+	
+	.spiderGame
+	{
+		display:none;
+	}
+	
+	.spiderGameSmall
+	{
+		display:block;
+		width:100%;
+	}
+	
+	.tutorial
+	{
+		display:none;
+	}
+	
+	.tutorialSmall
+	{
+		display:block;
+		width:100%;
+	}
+	
+	.liquid
+	{
+		display:none;
+	}
+	
+	.liquidSmall
+	{
+		display:block;
+		width:100%;
+	}
+
+	
+    
+    body
+	{
+        margin:0;
+        margin-left:5%;
+        margin-right:5%;
+        margin-bottom:10px;
+    }
+    
+	#navlist
+	{
+		float:left;
+		clear:left;
+		margin:0 0 10px;
+		width:100%;
+		display:block;
+		padding:10px;
+		text-align:center;
+	}
+	
+	#navlist li
+	{
+		margin:0;
+		background: #efefef;
+        background-color:#BA55D3;
+		display:block;
+		margin-bottom:3px;
+	}
+    
+    #navlist #active
+    {
+        background-color: white;
+    }
+    
+    #navlist a:hover 
+    {
+        color: #8A2BE2;
+	    background-color: #FF00FF;
+	    text-decoration: none;
+    }
+    
+    #navlist li:hover a
+    {
+        background-color: #FF00FF;
+    }
+    
+    #navlist li:hover
+    {
+        background-color: #FF00FF;
+    }
+}
