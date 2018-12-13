@@ -16,7 +16,7 @@ add(["media/lab-background.png", "media/game-over-bg.png", "media/start-scene.pn
     "media/spider.png", "media/liquids/chocolate.png", "media/liquids/goo.png",
     "media/liquids/icicle.png", "media/liquids/lava.png", "media/liquids/milk.png",
     "media/liquids/pee.png", "media/liquids/poison.png", "media/liquids/water.png",
-    "media/jarreal.png"
+    "media/jarreal.png", "media/pipette.png"
 ]).on("progress", e => {
     console.log(`progress=${e.progress}`)
 }).
@@ -67,7 +67,7 @@ let dt;
 
 // Game Scene variables
 let divider = 8;
-let division = (sceneWidth - 50) / divider;
+let division = (sceneWidth - 250) / divider;
 let randomNum;
 
 let circles = [];
@@ -93,6 +93,7 @@ function setup() {
     backgroundImgs.push(PIXI.loader.resources["media/lab-background.png"].texture);
     backgroundImgs.push(PIXI.loader.resources["media/game-over-bg.png"].texture);
     backgroundImgs.push(PIXI.loader.resources["media/jarreal.png"].texture);
+    backgroundImgs.push(PIXI.loader.resources["media/pipette.png"].texture);
 
     // Load the liquid sprites
     liquidsTextures.push(PIXI.loader.resources["media/liquids/water.png"].texture);
@@ -116,8 +117,15 @@ function setup() {
     gameScene.visible = false;
     stage.addChild(gameScene);
     let gameSceneBg = new Background(0, 0, sceneWidth, sceneHeight, 1);
-    let jar = new Background(100, 50, sceneWidth * 0.8, sceneHeight -30, 3);
+    let jar = new Background(100, 50, sceneWidth * 0.8, sceneHeight - 30, 3);
     gameScene.addChild(gameSceneBg);
+
+    // Add the pipettes
+    for (let i = 2; i <= divider + 1; i++) {
+        let pipette = new Background((division - 5) * i + 75, 0, 108, 600, 4, 0.2);
+        gameScene.addChild(pipette);
+    }
+
     gameScene.addChild(jar);
 
     // Create the `controls` scene
@@ -270,14 +278,14 @@ function createLabelsAndButtons() {
     gameOverTimeLabel = new PIXI.Text();
     gameOverTimeLabel.style = textStyle;
     gameOverTimeLabel.x = sceneWidth / 12 + 30;
-    gameOverTimeLabel.y = sceneHeight / 2 - 50;
+    gameOverTimeLabel.y = sceneHeight / 2 - 100;
     gameOverScene.addChild(gameOverTimeLabel);
 
     // High score label
     highScoreLabel = new PIXI.Text();
     highScoreLabel.style = textStyle;
-    highScoreLabel.x = sceneWidth / 12 + 30;
-    highScoreLabel.y = sceneHeight / 2 + 50;
+    highScoreLabel.x = sceneWidth / 12 + 10;
+    highScoreLabel.y = sceneHeight / 2;
     gameOverScene.addChild(highScoreLabel);
 
     let overStyle = new PIXI.TextStyle({

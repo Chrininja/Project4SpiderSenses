@@ -103,65 +103,61 @@ function liquidDrops() {
 
     randomNum = Math.floor(Math.random() * divider) + 1;
 
+    let spawnX = division * randomNum + 125;
+    let spawnY = 135;
+
     switch (randomNum) {
         case liquidType.Water:
-            let water = new Liquid(division * randomNum, 0, 500, liquidType.Water);
+            let water = new Liquid(spawnX, spawnY, 500, liquidType.Water);
             liquids.push(water);
             gameScene.addChild(water);
             waterDropSound.play();
             break;
 
         case liquidType.Lava:
-            let lava = new Liquid(division * randomNum, 0, 500, liquidType.Lava);
-            lava.x = division * randomNum;
+            let lava = new Liquid(spawnX, spawnY, 500, liquidType.Lava);
             liquids.push(lava);
             gameScene.addChild(lava);
             fireSound.play();
             break;
 
         case liquidType.Goo:
-            let goo = new Liquid(division * randomNum, 0, 500, liquidType.Goo);
-            goo.x = division * randomNum;
+            let goo = new Liquid(spawnX, spawnY, 500, liquidType.Goo);
             liquids.push(goo);
             gameScene.addChild(goo);
             gooSound.play();
             break;
 
         case liquidType.Poison:
-            let poison = new Liquid(division * randomNum, 0, 500, liquidType.Poison);
-            poison.x = division * randomNum;
+            let poison = new Liquid(spawnX, spawnY, 500, liquidType.Poison);
             liquids.push(poison);
             gameScene.addChild(poison);
             poisonSound.play();
             break;
 
         case liquidType.Chocolate:
-            let chocolate = new Liquid(division * randomNum, 0, 500, liquidType.Chocolate);
-            chocolate.x = division * randomNum;
+            let chocolate = new Liquid(spawnX, spawnY, 500, liquidType.Chocolate);
             liquids.push(chocolate);
             gameScene.addChild(chocolate);
             chocolateSound.play();
             break;
 
         case liquidType.Pee:
-            let pee = new Liquid(division * randomNum, 0, 500, liquidType.Pee);
-            pee.x = division * randomNum;
+            let pee = new Liquid(spawnX, spawnY, 500, liquidType.Pee);
             liquids.push(pee);
             gameScene.addChild(pee);
             peeSound.play();
             break;
 
         case liquidType.Ice:
-            let ice = new Liquid(division * randomNum, 0, 500, liquidType.Ice);
-            ice.x = division * randomNum;
+            let ice = new Liquid(spawnX, spawnY, 500, liquidType.Ice);
             liquids.push(ice);
             gameScene.addChild(ice);
             liquidNitroSound.play();
             break;
 
         case liquidType.Milk:
-            let milk = new Liquid(division * randomNum, 0, 500, liquidType.Milk);
-            milk.x = division * randomNum;
+            let milk = new Liquid(spawnX, spawnY, 500, liquidType.Milk);
             liquids.push(milk);
             gameScene.addChild(milk);
             milkSound.play();
